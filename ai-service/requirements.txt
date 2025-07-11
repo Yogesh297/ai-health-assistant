@@ -3,7 +3,7 @@ transformers==4.41.2
 torch==2.7.1
 torchvision==0.22.1
 torchaudio==2.7.1
-Pillow==9.4.0
+Pillow>=10.0.0
 numpy==1.26.4
 googletrans==4.0.0-rc1
 requests==2.31.0
