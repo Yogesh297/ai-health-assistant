@@ -8,6 +8,3 @@ services:
     envVars:
       - key: PORT
         value: 5001
-    build:
-      env:
-        PYTHON_VERSION: 3.10.13
