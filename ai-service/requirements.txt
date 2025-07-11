@@ -1,11 +1,11 @@
 Flask==2.3.3
 transformers==4.41.2
-torch==2.7.1
-torchvision==0.22.1
-torchaudio==2.7.1
-Pillow==10.0.0
+torch==2.5.1
+torchvision==0.16.1
+torchaudio==2.5.1
+Pillow>=10.0.0
 numpy==1.26.4
 googletrans==3.1.0a0
 requests==2.31.0
-sentence-transformers==2.2.2
+sentence-transformers==2.7.0
 scikit-learn==1.5.0
