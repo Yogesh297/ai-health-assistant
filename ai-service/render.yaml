@@ -5,7 +5,9 @@ services:
     plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
-    pythonVersion: 3.10.13   
     envVars:
       - key: PORT
         value: 5001
+    build:
+      environment:
+        pythonVersion: 3.10.13
