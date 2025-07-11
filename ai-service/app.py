@@ -11,6 +11,7 @@ import torch
 from PIL import Image
 import torchvision.transforms as transforms
 from torchvision import models
+from huggingface_hub import hf_hub_download
 
 app = Flask(__name__)
 CORS(app)
@@ -94,7 +95,13 @@ def get_chat_history():
 NUM_CLASSES = 7
 model_resnet = models.resnet18(pretrained=False)
 model_resnet.fc = torch.nn.Linear(model_resnet.fc.in_features, NUM_CLASSES)
-model_resnet.load_state_dict(torch.load("models/resnet18_skin_disease.pt", map_location='cpu'))
+
+resnet_path = hf_hub_download(
+    repo_id="yyc297/tinyllama-health-model",  # your HF repo
+    filename="resnet18_skin_disease.pt",
+    local_dir="models"
+)
+model_resnet.load_state_dict(torch.load(resnet_path, map_location='cpu'))
 model_resnet.eval()
 
 skin_labels = {
