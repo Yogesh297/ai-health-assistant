@@ -3,8 +3,11 @@ services:
     name: ai-health-backend
     env: python
     plan: free
-    buildCommand: ""
+    buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
       - key: PORT
         value: 5001
+    build:
+      environment:
+        pythonVersion: 3.10.13
