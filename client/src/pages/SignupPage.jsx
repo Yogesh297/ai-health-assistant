@@ -1,28 +1,46 @@
 // SignupPage.jsx
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { register } from '../store/slices/authSlice'
+import axios from 'axios'
 import { useNavigate, Link } from 'react-router-dom'
 import ThemeToggle from '../components/ThemeToggle'
 import healthcareImg from '../assets/healthcare.jpg';
 
 export default function SignupPage() {
-  const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { loading, error } = useSelector((state) => state.auth)
 
   const [form, setForm] = useState({ name: '', email: '', password: '' })
   const [showPassword, setShowPassword] = useState(false)
+  const [otpSent, setOtpSent] = useState(false)
+  const [otp, setOtp] = useState('')
+  const [serverMessage, setServerMessage] = useState('')
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault()
-    dispatch(register(form)).then((res) => {
-      if (res.meta.requestStatus === 'fulfilled') navigate('/chat')
-    })
+    try {
+      const res = await axios.post('http://localhost:5000/api/auth/register', form)
+      if (res.status === 200) {
+        setOtpSent(true)
+        setServerMessage('OTP sent to your email. Please enter it below.')
+      }
+    } catch (err) {
+      setServerMessage(err.response?.data?.message || 'Registration failed')
+    }
+  }
+
+  const handleVerifyOtp = async () => {
+    try {
+      const res = await axios.post('http://localhost:5000/api/auth/verify-otp', { ...form, otp })
+      if (res.status === 201) {
+        alert('Registered successfully! Please login.')
+        navigate('/login')
+      }
+    } catch (err) {
+      setServerMessage(err.response?.data?.message || 'OTP verification failed')
+    }
   }
 
   const handleCallAmbulance = () => {
@@ -114,15 +132,37 @@ export default function SignupPage() {
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg transition font-semibold"
-              >
-                {loading ? 'Registering...' : 'Sign Up'}
-              </button>
+              {!otpSent ? (
+                <button
+                  type="submit"
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg transition font-semibold"
+                >
+                  Sign Up
+                </button>
+              ) : (
+                <>
+                  <div>
+                    <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">Enter OTP</label>
+                    <input
+                      type="text"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500"
+                      placeholder="Enter the OTP sent to your email"
+                      required
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleVerifyOtp}
+                    className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg transition font-semibold"
+                  >
+                    Verify OTP & Complete Signup
+                  </button>
+                </>
+              )}
 
-              {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+              {serverMessage && <p className="text-red-500 text-sm text-center">{serverMessage}</p>}
 
               <p className="text-center text-sm text-gray-600 dark:text-gray-400">
                 Already have an account?{' '}
@@ -135,14 +175,14 @@ export default function SignupPage() {
         </div>
 
         {/* Right Section - Illustration and Tips */}
-         <div className="hidden md:flex flex-col justify-center items-center w-1/3 bg-transparent p-10 space-y-4 transition-colors duration-300">
-                 <div className="bg-white/30 dark:bg-white/10 backdrop-blur-lg p-4 rounded-2xl shadow-lg">
-         <img
-           src={healthcareImg}
-           alt="Health AI"
-           className="w-44 h-auto rounded-xl shadow-xl transform transition-transform duration-300 hover:scale-105 hover:rotate-1"
-         />
-       </div>
+        <div className="hidden md:flex flex-col justify-center items-center w-1/3 bg-transparent p-10 space-y-4 transition-colors duration-300">
+          <div className="bg-white/30 dark:bg-white/10 backdrop-blur-lg p-4 rounded-2xl shadow-lg">
+            <img
+              src={healthcareImg}
+              alt="Health AI"
+              className="w-44 h-auto rounded-xl shadow-xl transform transition-transform duration-300 hover:scale-105 hover:rotate-1"
+            />
+          </div>
           <h3 className="text-xl font-bold text-indigo-700 dark:text-white">Your Health Matters</h3>
           <ul className="list-disc list-inside text-[16px] text-gray-700 dark:text-gray-300 space-y-2 font-semibold">
             <li>Get symptom-based diagnosis instantly</li>
