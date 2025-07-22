@@ -1,86 +1,60 @@
-const express = require('express')
-const jwt = require('jsonwebtoken')
-const User = require('../models/User')
-const router = express.Router()
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+const router = express.Router();
+const { registerUser, verifyOtpAndCreateUser } = require('../controllers/authController');
 
-// Register a new user
-router.post('/register', async (req, res) => {
-  try {
-    const { name, email, password } = req.body
+// 1️⃣ Route: Register - sends OTP
+router.post('/register', registerUser);
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email })
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' })
-    }
+// 2️⃣ Route: Verify OTP & create user
+router.post('/verify-otp', verifyOtpAndCreateUser);
 
-    // Create new user
-    const user = await User.create({ name, email, password })
-
-    // Generate JWT token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRE
-    })
-
-    res.status(201).json({
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email
-      }
-    })
-  } catch (error) {
-    res.status(500).json({ message: error.message })
-  }
-})
-
-// Login user
+// 3️⃣ Route: Login
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body
+    const { email, password } = req.body;
 
     // Check if user exists
-    const user = await User.findOne({ email }).select('+password')
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' })
-    }
+    const user = await User.findOne({ email }).select('+password');
+    if (!user) return res.status(401).json({ message: 'Invalid credentials' });
 
-    // Check if password is correct
-    const isMatch = await user.comparePassword(password)
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' })
-    }
+    // Check password
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
-    // Generate JWT token
+    // (Optional) Enforce verified email — remove this if not storing `isVerified`
+    // if (!user.isVerified) {
+    //   return res.status(403).json({ message: 'Please verify your email before logging in.' });
+    // }
+
+    // Token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRE
-    })
+      expiresIn: process.env.JWT_EXPIRE,
+    });
 
     res.status(200).json({
       token,
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
-      }
-    })
+        email: user.email,
+      },
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
-})
+});
 
-// Get current user
+// 4️⃣ Route: Get Current User
 router.get('/me', async (req, res) => {
   try {
-    const user = await User.findById(req.user.id)
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' })
-    }
-    res.status(200).json(user)
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
-})
+});
 
-module.exports = router
+module.exports = router;
