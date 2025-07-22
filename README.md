@@ -28,7 +28,7 @@ This project simulates an AI-powered health assistant designed to **help users e
 
 ---
 
-## 🎥 Demo (Optional)
+## 🎥 Demo 
 
 > ⚠️ Deployment on Render is currently facing memory issues.  
 > 🔧 Please run locally for best results.
@@ -37,9 +37,9 @@ This project simulates an AI-powered health assistant designed to **help users e
 
 ## 📸 Screenshots
 
-| Symptom Chat | Login page | Signup page |
-|--------------|---------------|-------------------|
-| ![chat](screenshots/chat.png) | ![image](screenshots/Login.png) | ![voice](screenshots/signup.png) |
+| Symptom Chat | Login page | Signup page |OTP verification |
+|--------------|---------------|-------------------|-------------------|
+| ![chat](screenshots/chat.png) | ![image](screenshots/Login.png) | ![OTP](screenshots/otp.png) |
 
 ---
 
