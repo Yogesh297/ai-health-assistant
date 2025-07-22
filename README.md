@@ -82,15 +82,19 @@ JWT_EXPIRE=30d
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_password
 
-3️⃣ Setup Frontend (/client)
+### 3️⃣ Setup Frontend (/client)
+```bash
 cd ../client
 npm install
 npm run dev
+```
 
-4️⃣ Setup AI Service (/ai-service)
+### 4️⃣ Setup AI Service (/ai-service)
+```bash
 cd ../ai-service
 pip install -r requirements.txt
 python app.py
+```
 
 🧪 Model Info
 	•	TinyLLaMA (local LLM from Hugging Face, quantized): Handles chatbot replies
