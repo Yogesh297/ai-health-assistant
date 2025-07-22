@@ -39,7 +39,7 @@ This project simulates an AI-powered health assistant designed to **help users e
 
 | Symptom Chat | Login page | Signup page |OTP verification |
 |--------------|---------------|-------------------|-------------------|
-| ![chat](screenshots/chat.png) | ![image](screenshots/Login.png) | ![OTP](screenshots/otp.png) |
+| ![chat](screenshots/chat.png) | ![image](screenshots/Login.png) | ![signup](screenshots/signup.png) |![Otp](screenshots/Otp.png) |
 
 ---
 
