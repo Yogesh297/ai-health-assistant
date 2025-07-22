@@ -72,9 +72,53 @@ npm install
 npm run start
 
 🛠️ Make sure to configure your .env file inside the server/ directory:
-PORT=
-MONGODB_URI=
+PORT=5000
+MONGODB_URI=your_mongodb_uri
 JWT_SECRET=your_jwt_secret
 JWT_EXPIRE=30d
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_password
+
+3️⃣ Setup Frontend (/client)
+cd ../client
+npm install
+npm run dev
+
+4️⃣ Setup AI Service (/ai-service)
+cd ../ai-service
+pip install -r requirements.txt
+python app.py
+
+🧪 Model Info
+	•	TinyLLaMA (local LLM from Hugging Face, quantized): Handles chatbot replies
+	•	ResNet18 trained on HAM10000: Predicts 7 skin conditions
+	•	SentenceTransformer (MiniLM): Used for matching FAQ-style queries
+
+💡 Limitations
+	•	Doesn’t provide actual diagnosis (just suggestions)
+	•	Render crashes if AI model memory exceeds free limits
+	•	Voice input limited to browsers that support Web Speech API
+
+🙋‍♂️ How It Works
+	1.	User logs in →
+	2.	Types or speaks query (EN or HI) →
+	3.	Flask server detects language → translates → runs LLM / FAQ search →
+	4.	If image uploaded → AI classifies skin issue
+	5.	Reply is translated if needed → sent back to frontend
+	6.	Chat stored in JSON file per user
+
+📁 Project Structure
+ai-health-assistant/
+├── client/       # React frontend
+├── server/       # Express backend (auth, MongoDB)
+├── ai-service/   # Flask app for AI logic
+        ├── models/       # LLM & ResNet models (downloaded at runtime)
+├── chat_logs/    # Stored user chat history
+├── screenshots/  # UI demo images
+└── README.md
+
+🙌 Author
+
+Yogesh Yadav
+📧 yogeshchitosiya29@gmail.com
+🔗 https://github.com/Yogesh297/ai-health-assistant
