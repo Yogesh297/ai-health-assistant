@@ -63,6 +63,7 @@ This project simulates an AI-powered health assistant designed to **help users e
 ```bash
 git clone https://github.com/Yogesh297/ai-health-assistant.git
 cd ai-health-assistant
+```
 
 ### 2️⃣ Start the Backend Server
 
@@ -70,6 +71,7 @@ cd ai-health-assistant
 cd server
 npm install
 npm run start
+```
 
 🛠️ Make sure to configure your .env file inside the server/ directory:
 PORT=5000
