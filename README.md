@@ -72,7 +72,7 @@ cd server
 npm install
 npm run start
 ```
-
+###
 🛠️ Make sure to configure your .env file inside the server/ directory:
 PORT=5000
 MONGODB_URI=your_mongodb_uri
@@ -80,6 +80,7 @@ JWT_SECRET=your_jwt_secret
 JWT_EXPIRE=30d
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_password
+```
 
 3️⃣ Setup Frontend (/client)
 cd ../client
